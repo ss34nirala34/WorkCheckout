@@ -125,6 +125,27 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="bin\Debug\Log\Error2014-01-13.log" />
+    <None Include="bin\Debug\Log\Error2014-02-27.log" />
+    <None Include="bin\Debug\Log\Error2014-05-04.log" />
+    <None Include="bin\Debug\Log\Error2014-05-05.log" />
+    <None Include="bin\Debug\Log\Error2014-05-08.log" />
+    <None Include="bin\Debug\Log\Error2014-05-09.log" />
+    <None Include="bin\Debug\Log\Info2014-01-16.log" />
+    <None Include="bin\Debug\Log\Info2014-01-17.log" />
+    <None Include="bin\Debug\Log\Info2014-01-18.log" />
+    <None Include="bin\Debug\Log\Info2014-02-27.log" />
+    <None Include="bin\Debug\Log\Info2014-03-10.log" />
+    <None Include="bin\Debug\Log\Info2014-05-05.log" />
+    <None Include="bin\Debug\Log\Info2014-05-08.log" />
+    <None Include="bin\Debug\Log\Info2014-05-09.log" />
+    <None Include="bin\Debug\Log\Info2014-05-12.log" />
+    <None Include="bin\Debug\WCOConfig" />
+    <None Include="bin\Debug\WCOConfig - 副本" />
+    <None Include="bin\Debug\WCOConfiglt" />
+    <None Include="bin\Debug\WorkCheckout.exe.config" />
+    <None Include="bin\Debug\WorkCheckout.vshost.exe.config" />
+    <None Include="bin\Debug\WorkCheckout.vshost.exe.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -136,6 +157,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\HtmlAgilityPack.dll" />
+    <Content Include="bin\Debug\NetDimension.Weibo.dll" />
+    <Content Include="bin\Debug\NetDimension.Weibo.pdb" />
+    <Content Include="bin\Debug\NetDimension.Weibo.xml" />
+    <Content Include="bin\Debug\WorkCheckout.exe" />
+    <Content Include="bin\Debug\WorkCheckout.pdb" />
+    <Content Include="bin\Debug\WorkCheckout.vshost.exe" />
     <Content Include="WorkCheckoutICO.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +182,9 @@
       <Project>{7b795714-40d6-4b2e-a277-cbe13c33e1ed}</Project>
       <Name>NetDimension.Weibo40</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
