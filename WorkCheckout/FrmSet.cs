@@ -477,7 +477,7 @@ namespace WorkCheckout
                 TimeSpan ts = new TimeSpan(0, 0, (int)Share.DateDiffTotalSecond(CheckInTime));
                 StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
                 notifyIcon1.Text = StrTips;
-                if (nowHour >= Convert.ToInt32(startHour) && nowHour < Convert.ToInt32(endHour))
+                if (nowHour >= Convert.ToInt32(startHour) && nowHour <= Convert.ToInt32(endHour))
                 {
                     if (!chkApartTipsAW.Checked) return; //如果关闭则返回
 
@@ -689,8 +689,8 @@ namespace WorkCheckout
                 chkWeiboRemote.Checked = false;
                 return;
             }
-            weiboTimer.Interval = 180000;
-            //weiboTimer.Interval = 20000;
+            //weiboTimer.Interval = 180000;
+            weiboTimer.Interval = 20000;
             weiboTimer.Enabled = true;
             weiboTimer.Tick += weiboTimer_Tick;
             oauth = weiboRemote.LogInWeibo();
@@ -729,7 +729,8 @@ namespace WorkCheckout
                
                 Sina = new Client(oauth);
                 var json = Sina.API.Entity.Statuses.UserTimeline(count: 1);
-             
+                var json1 = Sina.API.Entity.Statuses.PublicTimeline (count: 1);
+               
                 if (json.Statuses == null) return;
                 string command = null;
                 foreach (var status in json.Statuses)
