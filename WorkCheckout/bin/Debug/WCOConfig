@@ -1,21 +1,8 @@
 #配置，请不要随意改动
 [WCO]
-ChkWeiboRemote=True
-UserName=tLL4vPANb4uq+9/zLEm8Qw==
-PassWord=NeFkHicSwGnsKnMI7F1lOQ==
-LastSignInTime=2014-06-04 08:45:21
-AutoCheckIn=True
-TipsAW=True
-AutoCheckOut=True
-Tips9AW=True
-ApartTipsAW=True
-ApartEndTime=20
-LastCheckOutTime=2014-06-03 22:01:42
 TimingTipsSW=True
 AutoTipsSW=True
-TimingSW=08:55:00
-ApartMinutes=20
-CheckInDay=星期二,星期一,星期三,星期四,星期五,
-WeiboUserName=QakkrARfwgJ5Zv95cFGres1p6f/UUffF
+AcessToken=r+NjAgDC6CDeTepwVJOPY9UY6bT+Tqlv0Qmd/tAWS4mBofECQCuClA==
+WeiboUserName=MohL2ChMPrTaxFpf12hQvzEFB1psaXZ6
 WeiboPassword=FaCE2f1sXculbkadt2EHMg==
-AcessToken=Xz4HnY9E7YgiQJ+G0p+MUdt84wCdMbpsp/Ex3AVXOf1E6V7jBsTxUg==
+ChkWeiboRemote=True

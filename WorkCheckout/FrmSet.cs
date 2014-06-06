@@ -477,7 +477,7 @@ namespace WorkCheckout
                 TimeSpan ts = new TimeSpan(0, 0, (int)Share.DateDiffTotalSecond(CheckInTime));
                 StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
                 notifyIcon1.Text = StrTips;
-                if (nowHour >= Convert.ToInt32(startHour) && nowHour < Convert.ToInt32(endHour))
+                if (nowHour >= Convert.ToInt32(startHour) && nowHour <= Convert.ToInt32(endHour))
                 {
                     if (!chkApartTipsAW.Checked) return; //如果关闭则返回
 
@@ -689,8 +689,8 @@ namespace WorkCheckout
                 chkWeiboRemote.Checked = false;
                 return;
             }
-            weiboTimer.Interval = 180000;
-            //weiboTimer.Interval = 30000;
+            //weiboTimer.Interval = 180000;
+            weiboTimer.Interval = 20000;
             weiboTimer.Enabled = true;
             weiboTimer.Tick += weiboTimer_Tick;
             oauth = weiboRemote.LogInWeibo();
@@ -702,7 +702,6 @@ namespace WorkCheckout
         void weiboTimer_Tick(object sender, EventArgs e)
         {
             if (DateTime.Now.Hour < 8) return;
-            string logstr = "";
             try
             {
                 TokenResult result;
@@ -727,10 +726,11 @@ namespace WorkCheckout
                 {
                     Sina = null;
                 }
-
+               
                 Sina = new Client(oauth);
                 var json = Sina.API.Entity.Statuses.UserTimeline(count: 1);
-
+                var json1 = Sina.API.Entity.Statuses.PublicTimeline (count: 1);
+               
                 if (json.Statuses == null) return;
                 string command = null;
                 foreach (var status in json.Statuses)
@@ -740,18 +740,11 @@ namespace WorkCheckout
                     Console.WriteLine(status.Text);
                     command = status.Text;
                 }
-                logstr = command;
-                //if (command == null)
-                //{
-                //    return;
-                //}
-                //LogUtil.WriteLog(command+" @"+DateTime.Now.ToString());
                 TodoWork(command);
-
             }
             catch (Exception ex)
             {
-                LogUtil.WriteLog(string.Format("{0}\r\n{1}", DateTime.Now, logstr));
+
                 LogUtil.WriteError(ex);
             }
             
@@ -818,20 +811,16 @@ namespace WorkCheckout
         bool KeyCheck(string str,params string[] keys)
         {
             bool result=false;
-             //System.Diagnostics.Debug.WriteLine(str);
-                foreach (string key in keys)
+            foreach (string key in keys)
+            {
+                //Regex regex = new Regex(string.Format("^c{0} 我在:.*"));
+                if (str == key || str.ToLower() == key.ToLower()||str.Contains(string.Format("{0} 我在",key)))
                 {
-                    //System.Diagnostics.Debug.WriteLine(key);
-                    //Regex regex = new Regex(string.Format("^c{0} 我在:.*"));
-                    if (str == key || str.ToLower() == key.ToLower() || str.Contains(string.Format("{0} 我在", key)))
-                    {
-                        result = true;
-                        
-                        break;
-                    }
+                    result = true;
+                    break;
                    
                 }
-            
+            }
             return result;
         }
         #region 常规设置
