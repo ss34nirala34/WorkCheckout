@@ -278,7 +278,7 @@ namespace WorkCheckout
         }
 
         private bool isStop;
-        DateTime timeTiming;
+        DateTime timeTiming = DateTime.MinValue;
         DateTime RandomTime()
         {
             string setTimeStr = Share.wFiles.ReadString("WCO", "TimingSW", "09:00:00");
@@ -303,8 +303,8 @@ namespace WorkCheckout
                 if (!Share.isToday(lastCheckInTime))
                 {
 
-                    if (timeTiming == DateTime.MinValue) return;
-
+                    //if (timeTiming == DateTime.MinValue) return;
+                    if (timeTiming == DateTime.MinValue) timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
                     if ((int)Share.DateDiffTotalSecond(timeTiming) == 0)
                     {
                         if (isStop)
@@ -479,6 +479,10 @@ namespace WorkCheckout
                 notifyIcon1.Text = StrTips;
                 if (nowHour >= Convert.ToInt32(startHour) && nowHour <= Convert.ToInt32(endHour))
                 {
+                    if (nowHour == Convert.ToInt32(endHour) && DateTime.Now.Minute > Convert.ToInt32(apartMinutes))
+                    {
+                        return;
+                    }
                     if (!chkApartTipsAW.Checked) return; //如果关闭则返回
 
                     if (hidWebBroser != null)
@@ -689,15 +693,15 @@ namespace WorkCheckout
                 chkWeiboRemote.Checked = false;
                 return;
             }
-            //weiboTimer.Interval = 180000;
-            weiboTimer.Interval = 20000;
-            weiboTimer.Enabled = true;
+            weiboTimer.Interval = 180000;
+            //weiboTimer.Interval = 20000;
+            //weiboTimer.Enabled = true;
             weiboTimer.Tick += weiboTimer_Tick;
-            oauth = weiboRemote.LogInWeibo();
+            //oauth = weiboRemote.LogInWeibo();
 
         }
 
-        private OAuth oauth;
+        private OAuth oauth=null;
         WeiboRemote weiboRemote=new WeiboRemote();
         void weiboTimer_Tick(object sender, EventArgs e)
         {
@@ -729,7 +733,7 @@ namespace WorkCheckout
                
                 Sina = new Client(oauth);
                 var json = Sina.API.Entity.Statuses.UserTimeline(count: 1);
-                var json1 = Sina.API.Entity.Statuses.PublicTimeline (count: 1);
+                //var json1 = Sina.API.Entity.Statuses.PublicTimeline (count: 1);
                
                 if (json.Statuses == null) return;
                 string command = null;
