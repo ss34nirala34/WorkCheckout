@@ -125,7 +125,7 @@ namespace WorkCheckout
         {
 
             string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?";
-            string urlAdd2 = "http://rd.tencent.com/tapd/ptlogin/ptlogins/login?";
+            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd)) || (webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页

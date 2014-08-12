@@ -39,7 +39,7 @@ namespace WorkCheckout
         private void webBrowserAg_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://rd.tencent.com/tapd/ptlogin/ptlogins/login?";
+            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowserAg.Url != null && webBrowserAg.Url.ToString().Contains(urlAdd)) || (webBrowserAg.Url != null && webBrowserAg.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页
