@@ -114,8 +114,12 @@ namespace WorkCheckout
                                     search = false;
                                     Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
                                     FrmSet.CheckInTime = DateTime.Now;
-                                    Sina = new Client(WeiboOauth);
-                                    Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}",Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
+                                    if (WeiboOauth!=null)
+                                    {
+                                        Sina = new Client(WeiboOauth);
+                                        Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}", Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
+                                    }
+                                    
                                     webBrowserWb.Dispose();
                                 }
                             }
