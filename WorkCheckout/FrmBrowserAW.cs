@@ -64,7 +64,7 @@ namespace WorkCheckout
                 //timer.Tick += timer_Tick;
                 search = true;
                 Share.SuppressWininetBehavior();
-                webBrowser1.Navigate("http://rd.tencent.com/outsourcing/attendances/check_out/");
+                webBrowser1.Navigate("http://om.tencent.com/attendances/check_out/");
                 wb = webBrowser1.ActiveXInstance as SHDocVw.WebBrowser;
                 wb.NavigateComplete2 += new DWebBrowserEvents2_NavigateComplete2EventHandler(wb_NavigateComplete2);
                 //waitwebCompleted();

@@ -61,7 +61,7 @@ namespace WorkCheckout
                     }
                 }
             }
-            string urlCheckOut = "http://rd.tencent.com/outsourcing/attendances/check_out";
+            string urlCheckOut = "http://om.tencent.com/attendances/check_out";
             string urlCheckIn = "http://rd.tencent.com/outsourcing/attendances/add";
             if (webBrowserAg.Url != null)
             {

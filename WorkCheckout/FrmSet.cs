@@ -178,7 +178,7 @@ namespace WorkCheckout
                 }
             }
             if (webBrowser.ReadyState != WebBrowserReadyState.Complete) return;
-            string urlCheckOut = "http://rd.tencent.com/outsourcing/attendances/check_out";
+            string urlCheckOut = "http://om.tencent.com/attendances/check_out";
             string urlCheckIn = "http://rd.tencent.com/outsourcing/attendances/add";
             if (webBrowser.Url != null)
             {
@@ -293,7 +293,7 @@ namespace WorkCheckout
         }
         private void timer_Tick(object sender, EventArgs e)
         {
-            
+            timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             if (DateTime.Now.Hour==0&&DateTime.Now.Minute==0)
             {
                 timeTiming = RandomTime();
@@ -304,7 +304,7 @@ namespace WorkCheckout
                 {
 
                     //if (timeTiming == DateTime.MinValue) return;
-                    if (timeTiming == DateTime.MinValue) timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                    //if (timeTiming == DateTime.MinValue) timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
                     if ((int)Share.DateDiffTotalSecond(timeTiming) == 0)
                     {
                         if (isStop)
@@ -335,7 +335,7 @@ namespace WorkCheckout
                         else
                         {
                             if (!lstCheckInDay.Items.Contains(Week())) return;
-                            FrmStartWork frmStart = new FrmStartWork();
+                            FrmStartWork frmStart = new FrmStartWork();  //提示签入
                             frmStart.TopMost = true;
                             frmStart.Show();
                             
@@ -617,6 +617,7 @@ namespace WorkCheckout
             #region 上班签入
             timeTiming = RandomTime();//获取随机时间
             CheckAgTime.Interval = 300000;
+            //CheckAgTime.Interval = 30000;
             CheckAgTime.Tick += new EventHandler(CheckAgTime_Tick);
            
             string checkInDayStr = Share.wFiles.ReadString("WCO", "CheckInDay", "星期一,星期二,星期三,星期四,星期五");
@@ -668,6 +669,7 @@ namespace WorkCheckout
             bool tipsAwCheck = chkTipsAW.Checked;
             RegSet(tipsAwCheck);
             #endregion
+
             #region 微博遥控
             txtWeiboUserName.Text = WeiboUserName = CryptHelper.DecryptString(Share.wFiles.ReadString("WCO", "WeiboUserName", ""));
             txttxtWeiboPassword.Text = WeiboPassword = CryptHelper.DecryptString(Share.wFiles.ReadString("WCO", "WeiboPassword", ""));
@@ -677,6 +679,10 @@ namespace WorkCheckout
             LoadchkWeiboRemoteChk = false;
 
             #endregion
+            ///屏蔽微博遥控功能
+            chkWeiboRemote.Checked = false;
+            chkWeiboRemote.Enabled = false;
+
         }
 
        
@@ -851,7 +857,7 @@ namespace WorkCheckout
             try
             {
                 Share.SuppressWininetBehavior();
-                webBrowser.Navigate("http://rd.tencent.com/outsourcing/attendances/check_out/");
+                webBrowser.Navigate("http://om.tencent.com/attendances/check_out/");
 
             }
             catch (Exception exception)

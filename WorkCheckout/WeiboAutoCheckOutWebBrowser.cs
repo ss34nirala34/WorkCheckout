@@ -28,7 +28,7 @@ namespace WorkCheckout
             {
                 search = true;
                 Share.SuppressWininetBehavior();
-                webBrowser.Navigate("http://rd.tencent.com/outsourcing/attendances/check_out/");
+                webBrowser.Navigate("http://om.tencent.com/attendances/check_out/");
                 wb = webBrowser.ActiveXInstance as SHDocVw.WebBrowser;
                 wb.NavigateComplete2 += new DWebBrowserEvents2_NavigateComplete2EventHandler(wb_NavigateComplete2);
                 //waitwebCompleted();
