@@ -291,9 +291,10 @@ namespace WorkCheckout
             LogUtil.WriteLog(time.ToString(), LogType.Info);
             return time;
         }
+
         private void timer_Tick(object sender, EventArgs e)
         {
-            timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            
             if (DateTime.Now.Hour==0&&DateTime.Now.Minute==0)
             {
                 timeTiming = RandomTime();
@@ -615,6 +616,7 @@ namespace WorkCheckout
             rdoDefaultBrowser.CheckedChanged += rdoDefaultBrowser_CheckedChanged;
             #endregion
             #region 上班签入
+            timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//初始化登录时间
             timeTiming = RandomTime();//获取随机时间
             CheckAgTime.Interval = 300000;
             //CheckAgTime.Interval = 30000;
