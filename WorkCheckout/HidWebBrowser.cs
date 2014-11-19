@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using SHDocVw;
 using WebBrowser = System.Windows.Forms.WebBrowser;
 
@@ -102,32 +103,42 @@ namespace WorkCheckout
                System.Threading.Thread submitT = new Thread(() =>
                {
                    Thread.Sleep(1000);
-
-                   while (search)
+                   try
                    {
-                       webBrowser.Invoke(new Action(() =>
+                       while (search)
                        {
-                           HtmlDocument cd = webBrowser.Document;
-                           HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
-
-                           foreach (HtmlElement item in dhl)
+                           webBrowser.Invoke(new Action(() =>
                            {
-                               if (item.InnerText == "提交" || item.InnerText == "Submit")
+
+                               HtmlDocument cd = webBrowser.Document;
+                               HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
+
+                               foreach (HtmlElement item in dhl)
                                {
-                                   item.InvokeMember("click");
-                                   search = false;
-                                   Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                  
+                                   if (item.InnerText == "提交" || item.InnerText == "Submit")
+                                   {
+                                       item.InvokeMember("click");
+                                       search = false;
+                                       Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
+
                                        showTipsDelegate();
-                                     
+
                                        webBrowser.Dispose();
 
+                                   }
                                }
-                           }
-                       }));
+                           }));
 
-                       Thread.Sleep(1000);
+                           Thread.Sleep(1000);
+                       }
                    }
+                   catch (Exception ex)
+                   {
+                       
+                       LogUtil.WriteError(ex);
+                   }
+
+                  
                });
                submitT.Start();
            } 

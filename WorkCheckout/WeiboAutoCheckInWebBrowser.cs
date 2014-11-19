@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using EncryptionHelper;
 using NetDimension.Weibo;
 using SHDocVw;
@@ -99,34 +100,43 @@ namespace WorkCheckout
                 {
                     Thread.Sleep(1000);
                     bool search = true;
-                    while (search)
+                    try
                     {
-                        webBrowserWb.Invoke(new Action(() =>
+                        while (search)
                         {
-                            HtmlDocument cd = webBrowserWb.Document;
-                            HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
-
-                            foreach (HtmlElement item in dhl)
+                            webBrowserWb.Invoke(new Action(() =>
                             {
-                                if (item.InnerText == "提交" || item.InnerText == "Submit")
-                                {
-                                    item.InvokeMember("click");
-                                    search = false;
-                                    Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                    FrmSet.CheckInTime = DateTime.Now;
-                                    if (WeiboOauth!=null)
-                                    {
-                                        Sina = new Client(WeiboOauth);
-                                        Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}", Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
-                                    }
-                                    
-                                    webBrowserWb.Dispose();
-                                }
-                            }
-                        }));
+                                HtmlDocument cd = webBrowserWb.Document;
+                                HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
 
-                        Thread.Sleep(1000);
+                                foreach (HtmlElement item in dhl)
+                                {
+                                    if (item.InnerText == "提交" || item.InnerText == "Submit")
+                                    {
+                                        item.InvokeMember("click");
+                                        search = false;
+                                        Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
+                                        FrmSet.CheckInTime = DateTime.Now;
+                                        if (WeiboOauth != null)
+                                        {
+                                            Sina = new Client(WeiboOauth);
+                                            Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}", Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
+                                        }
+
+                                        webBrowserWb.Dispose();
+                                    }
+                                }
+                            }));
+
+                            Thread.Sleep(1000);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        
+                        LogUtil.WriteError(ex);
+                    }
+                    
                 });
                 submitT.Start();
             } 

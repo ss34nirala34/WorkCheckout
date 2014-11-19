@@ -76,6 +76,8 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.chkTim = new System.Windows.Forms.CheckBox();
+            this.dtpTimOut = new System.Windows.Forms.DateTimePicker();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -349,6 +351,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.dtpTimOut);
+            this.groupBox2.Controls.Add(this.chkTim);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cmbEnd);
@@ -360,7 +364,7 @@
             this.groupBox2.Controls.Add(this.chkTips9AW);
             this.groupBox2.Location = new System.Drawing.Point(3, 35);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(378, 121);
+            this.groupBox2.Size = new System.Drawing.Size(378, 183);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "自动签出选项";
@@ -590,6 +594,25 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // chkTim
+            // 
+            this.chkTim.AutoSize = true;
+            this.chkTim.Location = new System.Drawing.Point(8, 130);
+            this.chkTim.Name = "chkTim";
+            this.chkTim.Size = new System.Drawing.Size(96, 16);
+            this.chkTim.TabIndex = 10;
+            this.chkTim.Text = "设定签出时间";
+            this.chkTim.UseVisualStyleBackColor = true;
+            // 
+            // dtpTimOut
+            // 
+            this.dtpTimOut.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpTimOut.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpTimOut.Location = new System.Drawing.Point(8, 151);
+            this.dtpTimOut.Name = "dtpTimOut";
+            this.dtpTimOut.Size = new System.Drawing.Size(185, 26);
+            this.dtpTimOut.TabIndex = 11;
+            // 
             // FrmSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -676,6 +699,8 @@
         private System.Windows.Forms.ToolStripMenuItem 默认ToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkAutoTipsSW;
         private System.Windows.Forms.CheckBox chkTimingTipsSW;
+        private System.Windows.Forms.DateTimePicker dtpTimOut;
+        private System.Windows.Forms.CheckBox chkTim;
 
     }
 }

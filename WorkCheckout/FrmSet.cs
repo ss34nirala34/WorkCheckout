@@ -455,7 +455,13 @@ namespace WorkCheckout
 
             ApartTipsAWTimer.Tick += ApartTipsAWTimer_Tick;
             ApartTipsAWTimer.Enabled = true;
-            ApartTipsAWTimer.Start();
+            //ApartTipsAWTimer.Start(); //屏蔽
+
+            ApartTipsAWTim.Interval = 1000;
+            ApartTipsAWTim.Tick+=ApartTipsAWTim_Tick;
+            ApartTipsAWTim.Enabled = true;
+            ApartTipsAWTim.Start();
+
             //if (chkApartTipsAW.Checked)
             //{
             //    ApartCheckOut();
@@ -463,11 +469,74 @@ namespace WorkCheckout
             //}
 
         }
-        
+
+        private void ApartTipsAWTim_Tick(object sender, EventArgs e)
+        {
+            TimCheckOut();
+        }
+
         public static DateTime LastCheckOutTime;
         void ApartTipsAWTimer_Tick(object sender, EventArgs e)
         {
             ApartCheckOut();
+            
+        }
+
+        DateTime RandomCheckOutTime()
+        {
+            string setTimeStr = Share.wFiles.ReadString("WCO", "dtpTimOut", "19:00:00");
+            if (setTimeStr == string.Empty) return DateTime.MinValue;
+            DateTime SetTime = DateTime.ParseExact(setTimeStr, "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            Random r = new Random();
+            int i = r.Next(30, 600);
+            DateTime time = SetTime.AddSeconds(-i);//减去i秒
+            LogUtil.WriteLog(time.ToString(), LogType.Info);
+            return time;
+        }
+        DateTime timCheckOutTimg=new DateTime();
+        void TimCheckOut()
+        {
+            if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+            {
+                timCheckOutTimg = RandomCheckOutTime();
+            }
+            DateTime nowtime = DateTime.Now;
+            int nowHour = nowtime.Hour;
+            if (Share.isToday(CheckInTime))
+            {
+                TimeSpan ts = new TimeSpan(0, 0, (int)Share.DateDiffTotalSecond(CheckInTime));
+                StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
+                notifyIcon1.Text = StrTips;
+                if (nowHour >= 18 && (int)Share.DateDiffTotalSecond(timCheckOutTimg) == 0)
+                {
+                    
+                    if (!chkTim.Checked) return; //如果关闭则返回
+
+                    if (hidWebBroser != null)
+                    {
+                        hidWebBroser.Dispose();
+                    }
+                    hidWebBroser = new HidWebBrowser { showTipsDelegate = showTips };
+                    hidWebBroser.HidWebBrowserRun();
+                    Thread agThread=new Thread(() =>
+                    {
+                        Thread.Sleep(120000);
+                        this.Invoke(new Action(() =>
+                        {
+                            hidWebBroser = new HidWebBrowser { showTipsDelegate = showTips };
+                            hidWebBroser.HidWebBrowserRun();
+                        }));
+                    });
+                    agThread.Start();
+                }
+
+            }
+            else
+            {
+                notifyIcon1.Text = "你今天好像还没签到？";
+                CheckAgTime.Enabled = true;
+            }
         }
         private void ApartCheckOut()
         {
@@ -507,6 +576,7 @@ namespace WorkCheckout
         private string apartMinutes;
         Timer ApartTipsAWTimer = new Timer();
         Timer Tips9AWTimer = new Timer();
+        Timer ApartTipsAWTim = new Timer();
         public delegate void ShowTipsDelegate();
         public void showTips()
         {
@@ -519,12 +589,16 @@ namespace WorkCheckout
 
             if (Share.isToday(CheckInTime))
             {
-
                 TimeSpan ts = new TimeSpan(0, 0, (int)Share.DateDiffTotalSecond(CheckInTime));
-                StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
-                notifyIcon1.Text = StrTips;
+                if (!chkTim.Checked)
+                {
+                    StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
+                    notifyIcon1.Text = StrTips;
+                }
+                
                 if (Tips9AWTimerExit) return;
-                if (chkTips9AW.Checked)
+               
+                if (chkTips9AW.Checked&&DateTime.Now.Hour>=18)
                 {
 
                     string LastCheckOutTimeStr = Share.wFiles.ReadString("WCO", "LastCheckOutTime", "");
@@ -618,6 +692,8 @@ namespace WorkCheckout
             #region 上班签入
             timeTiming = DateTime.ParseExact("09:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//初始化登录时间
             timeTiming = RandomTime();//获取随机时间
+            timCheckOutTimg = DateTime.ParseExact("19:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);//初始化时间
+            timCheckOutTimg = RandomCheckOutTime();
             CheckAgTime.Interval = 300000;
             //CheckAgTime.Interval = 30000;
             CheckAgTime.Tick += new EventHandler(CheckAgTime_Tick);
@@ -658,10 +734,12 @@ namespace WorkCheckout
             chkTipsAW.Checked = Share.wFiles.ReadBool("WCO", "TipsAW", false);
             chkTips9AW.Checked = Share.wFiles.ReadBool("WCO", "Tips9AW", false);
             chkApartTipsAW.Checked = Share.wFiles.ReadBool("WCO", "ApartTipsAW", false);
+            chkTim.Checked = Share.wFiles.ReadBool("WCO", "chkTim", false);
             chkAutoCheckOut.CheckStateChanged += chkAutoCheckOut_CheckStateChanged;
             chkTipsAW.CheckStateChanged += chkTipsAW_CheckStateChanged;
             chkTips9AW.CheckStateChanged += chkTips9AW_CheckStateChanged;
             chkApartTipsAW.CheckedChanged += chkApartTipsAW_CheckedChanged;
+            chkTim.CheckedChanged += chkTim_CheckedChanged;
             startHour = cmbStart.Text = Share.wFiles.ReadString("WCO", "ApartStartTime", "18");
             endHour = cmbEnd.Text = Share.wFiles.ReadString("WCO", "ApartEndTime", "21");
             cmbStart.TextChanged += cmbStart_TextChanged;
@@ -670,6 +748,22 @@ namespace WorkCheckout
             txtApart.TextChanged += txtApart_TextChanged;
             bool tipsAwCheck = chkTipsAW.Checked;
             RegSet(tipsAwCheck);
+            dtpTimOut.Format = DateTimePickerFormat.Custom;
+            dtpTimOut.Format = DateTimePickerFormat.Custom;
+            dtpTimOut.CustomFormat = "HH点:mm分:ss秒";
+            dtpTimOut.ShowUpDown = true;
+            dtpTimOut.ValueChanged+=dtpTimOut_ValueChanged; ;
+            string dtpTimOutValue = Share.wFiles.ReadString("WCO", "dtpTimOut", "");
+            if (dtpTimOutValue != string.Empty)
+            {
+                DateTime dtpPowerOffEveryDayTime = DateTime.ParseExact(dtpTimOutValue, "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                dtpTimOut.Value = dtpPowerOffEveryDayTime;
+            }
+            else
+            {
+                DateTime dtpPowerOffEveryDayTime = DateTime.ParseExact("19:00:00", "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                dtpTimOut.Value = dtpPowerOffEveryDayTime;
+            }
             #endregion
 
             #region 微博遥控
@@ -681,9 +775,12 @@ namespace WorkCheckout
             LoadchkWeiboRemoteChk = false;
 
             #endregion
-            ///屏蔽微博遥控功能
+            ///屏蔽微博遥控功能,每隔一段时间签出功能
             chkWeiboRemote.Checked = false;
             chkWeiboRemote.Enabled = false;
+            chkApartTipsAW.Checked = false;
+            chkApartTipsAW.Enabled = false;
+
 
         }
 
@@ -1027,6 +1124,11 @@ namespace WorkCheckout
             }
             base.WndProc(ref aMessage);
         }
+        private void dtpTimOut_ValueChanged(object sender, EventArgs e)
+        {
+            Share.wFiles.WriteString("WCO", "dtpTimOut", string.Format("{0:HH:mm:ss}", dtpTimOut.Value));
+            timCheckOutTimg = RandomCheckOutTime();
+        }
 
         void chkAutoCheckOut_CheckStateChanged(object sender, EventArgs e)
         {
@@ -1067,6 +1169,15 @@ namespace WorkCheckout
             Share.wFiles.WriteBool("WCO", "TipsAW", tipsAwCheck);
             RegSet(tipsAwCheck);
         }
+        void chkTim_CheckedChanged(object sender, EventArgs e)
+        {
+            bool chkTimb = chkTim.Checked;
+            Share.wFiles.WriteBool("WCO", "chkTim", chkTimb);
+            ApartTipsAWTim.Enabled = chkTimb;
+
+            
+        }
+
 
         void RegSet(bool chk)
         {

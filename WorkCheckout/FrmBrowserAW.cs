@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using RunCmd;
 using SHDocVw;
 using Timer = System.Windows.Forms.Timer;
@@ -162,34 +163,43 @@ namespace WorkCheckout
                 System.Threading.Thread submitT = new Thread(() =>
                 {
                     Thread.Sleep(1000);
-
-                    while (search)
+                    try
                     {
-                        this.Invoke(new Action(() =>
+                        while (search)
                         {
-                            HtmlDocument cd = webBrowser1.Document;
-                            HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
-
-                            foreach (HtmlElement item in dhl)
+                            this.Invoke(new Action(() =>
                             {
-                                if (item.InnerText == "提交" || item.InnerText == "Submit")
+                                HtmlDocument cd = webBrowser1.Document;
+                                HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
+
+                                foreach (HtmlElement item in dhl)
                                 {
-                                    item.InvokeMember("click");
-                                    search = false;
-                                    Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                    if (Exit)
+                                    if (item.InnerText == "提交" || item.InnerText == "Submit")
                                     {
-                                        showTipsDelegate();
-                                        this.Close();
+                                        item.InvokeMember("click");
+                                        search = false;
+                                        Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
+                                        if (Exit)
+                                        {
+                                            showTipsDelegate();
+                                            this.Close();
+
+                                        }
 
                                     }
-
                                 }
-                            }
-                        }));
+                            }));
 
-                        Thread.Sleep(1000);
+                            Thread.Sleep(1000);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        
+                        LogUtil.WriteError(ex);
+                    }
+
+                    
                 });
                 submitT.Start();
             }
