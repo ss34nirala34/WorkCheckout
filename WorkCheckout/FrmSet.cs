@@ -489,7 +489,7 @@ namespace WorkCheckout
             DateTime SetTime = DateTime.ParseExact(setTimeStr, "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
             Random r = new Random();
-            int i = r.Next(30, 600);
+            int i = r.Next(60, 1500);
             DateTime time = SetTime.AddSeconds(-i);//减去i秒
             LogUtil.WriteLog(time.ToString(), LogType.Info);
             return time;

@@ -136,6 +136,12 @@ namespace WorkCheckout
                    {
                        
                        LogUtil.WriteError(ex);
+                       webBrowser.Invoke(new Action(() =>
+                       {
+                           FrmAfterWork frm = new FrmAfterWork();
+                           frm.TopMost = true;
+                           frm.Show();
+                       }));
                    }
 
                   
