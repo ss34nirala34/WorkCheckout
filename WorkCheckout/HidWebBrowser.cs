@@ -23,7 +23,7 @@ namespace WorkCheckout
        WebBrowser webBrowser=new WebBrowser();
        bool search = true;
        public FrmSet.ShowTipsDelegate showTipsDelegate;
-      
+       public FrmSet.ShowWindowsDele _showWindows;
        public void HidWebBrowserRun()
        {
            webBrowser.DocumentCompleted += webBrowser_DocumentCompleted;
@@ -103,6 +103,7 @@ namespace WorkCheckout
                System.Threading.Thread submitT = new Thread(() =>
                {
                    Thread.Sleep(1000);
+                
                    try
                    {
                        while (search)
@@ -136,12 +137,8 @@ namespace WorkCheckout
                    {
                        
                        LogUtil.WriteError(ex);
-                       webBrowser.Invoke(new Action(() =>
-                       {
-                           FrmAfterWork frm = new FrmAfterWork();
-                           frm.TopMost = true;
-                           frm.Show();
-                       }));
+                       _showWindows();
+
                    }
 
                   
