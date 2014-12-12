@@ -490,7 +490,7 @@ namespace WorkCheckout
 
             Random r = new Random();
             int i = r.Next(60, 1500);
-            DateTime time = SetTime.AddSeconds(-i);//减去i秒
+            DateTime time = SetTime.AddSeconds(i);//减去i秒
             LogUtil.WriteLog(time.ToString(), LogType.Info);
             return time;
         }
@@ -514,57 +514,78 @@ namespace WorkCheckout
                 notifyIcon1.Text = StrTips;
                 if (nowHour >= 18 && (int)Share.DateDiffTotalSecond(timCheckOutTimg) == 0)
                 {
-                    
-                    if (!chkTim.Checked) return; //如果关闭则返回
+                    #region 静默处理
+                    //if (!chkTim.Checked) return; //如果关闭则返回
 
-                    if (hidWebBroser != null)
-                    {
-                        hidWebBroser.Dispose();
-                    }
-                    hidWebBroser = new HidWebBrowser
-                    {
-                        showTipsDelegate = showTips,
-                        _showWindows = new ShowWindowsDele(() =>
-                        {
+                    //if (hidWebBroser != null)
+                    //{
+                    //    hidWebBroser.Dispose();
+                    //}
+                    //hidWebBroser = new HidWebBrowser
+                    //{
+                    //    showTipsDelegate = showTips,
+                    //    _showWindows = new ShowWindowsDele(() =>
+                    //    {
 
-                            this.Invoke(new Action(() =>
-                            {
-                                FrmBrowserAW frm = new FrmBrowserAW();
-                                frm.TopMost = true;
-                                frm.showTipsDelegate = showTips;
-                                frm.ShowInTaskbar = true;
-                                frm.Exit = false;
-                                frm.Show();
-                            }));
-                        })
+                    //        this.Invoke(new Action(() =>
+                    //        {
+                    //            FrmBrowserAW frm = new FrmBrowserAW();
+                    //            frm.TopMost = true;
+                    //            frm.showTipsDelegate = showTips;
+                    //            frm.ShowInTaskbar = true;
+                    //            frm.Exit = false;
+                    //            frm.Show();
+                    //        }));
+                    //    })
                       
                     
-                    };
-                    hidWebBroser.HidWebBrowserRun();
-                    Thread agThread=new Thread(() =>
+                    //};
+                    //hidWebBroser.HidWebBrowserRun();
+                    //Thread agThread=new Thread(() =>
+                    //{
+                    //    Thread.Sleep(120000);
+                    //    this.Invoke(new Action(() =>
+                    //    {
+                    //        hidWebBroser = new HidWebBrowser
+                    //        {
+                    //            showTipsDelegate = showTips,
+                    //            _showWindows = new ShowWindowsDele(() =>
+                    //            {
+
+                    //              this.Invoke(new Action(()=>
+                    //                {
+                    //                    FrmBrowserAW frm = new FrmBrowserAW();
+                    //                    frm.TopMost = true;
+                    //                    frm.showTipsDelegate = showTips;
+                    //                    frm.ShowInTaskbar = true;
+                    //                    frm.Exit = false;
+                    //                    frm.Show();
+                    //                }));
+                                   
+                    //            })
+                    //        };
+                    //        hidWebBroser.HidWebBrowserRun();
+                    //    }));
+                    //});
+                    //agThread.Start();
+                    #endregion
+                    FrmBrowserAW frm = new FrmBrowserAW();
+                    frm.showTipsDelegate = showTips;
+                    frm.ShowInTaskbar = true;
+                    frm.Exit = false;
+                    frm.Show();
+                    Thread agThread = new Thread(() =>
                     {
                         Thread.Sleep(120000);
                         this.Invoke(new Action(() =>
                         {
-                            hidWebBroser = new HidWebBrowser
-                            {
-                                showTipsDelegate = showTips,
-                                _showWindows = new ShowWindowsDele(() =>
-                                {
 
-                                  this.Invoke(new Action(()=>
-                                    {
-                                        FrmBrowserAW frm = new FrmBrowserAW();
-                                        frm.TopMost = true;
-                                        frm.showTipsDelegate = showTips;
-                                        frm.ShowInTaskbar = true;
-                                        frm.Exit = false;
-                                        frm.Show();
-                                    }));
-                                   
-                                })
-                            };
-                            hidWebBroser.HidWebBrowserRun();
+                            FrmBrowserAW frmAW = new FrmBrowserAW();
+                            frmAW.showTipsDelegate = showTips;
+                            frmAW.ShowInTaskbar = true;
+                            frmAW.Exit = false;
+                            frmAW.Show();
+                            
                         }));
                     });
                     agThread.Start();
