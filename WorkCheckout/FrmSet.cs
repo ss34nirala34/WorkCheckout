@@ -499,11 +499,13 @@ namespace WorkCheckout
         public delegate void ShowWindowsDele();
 
         public ShowWindowsDele showWindowsDele;
+        private bool IsCheckOut =true;
         void TimCheckOut()
         {
             if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
             {
                 timCheckOutTimg = RandomCheckOutTime();
+                IsCheckOut = true;
             }
             DateTime nowtime = DateTime.Now;
             int nowHour = nowtime.Hour;
@@ -512,6 +514,7 @@ namespace WorkCheckout
                 TimeSpan ts = new TimeSpan(0, 0, (int)Share.DateDiffTotalSecond(CheckInTime));
                 StrTips = "你已经工作了：" + (int)ts.TotalHours + "小时" + ts.Minutes + "分钟" + ts.Seconds + "秒";
                 notifyIcon1.Text = StrTips;
+              
                 if (nowHour >= 18 && (int)Share.DateDiffTotalSecond(timCheckOutTimg) == 0)
                 {
                     #region 静默处理
@@ -569,6 +572,11 @@ namespace WorkCheckout
                     //});
                     //agThread.Start();
                     #endregion
+
+                    if (IsCheckOut==false)
+                    {
+                        return;
+                    }
                     FrmBrowserAW frm = new FrmBrowserAW();
                     frm.showTipsDelegate = showTips;
                     frm.ShowInTaskbar = true;
@@ -589,6 +597,7 @@ namespace WorkCheckout
                         }));
                     });
                     agThread.Start();
+                    IsCheckOut = false;
                 }
 
             }
