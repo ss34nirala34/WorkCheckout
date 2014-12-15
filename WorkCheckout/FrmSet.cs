@@ -692,8 +692,13 @@ namespace WorkCheckout
                             hidWebBroser.Dispose();
                         }
                         LogUtil.WriteLog("Tips9AW:Try To CheckOut At:" + DateTime.Now, LogType.Info);
-                        hidWebBroser = new HidWebBrowser { showTipsDelegate = showTips };
-                        hidWebBroser.HidWebBrowserRun();
+                        FrmBrowserAW frmAW = new FrmBrowserAW();
+                        frmAW.showTipsDelegate = showTips;
+                        frmAW.ShowInTaskbar = true;
+                        frmAW.Exit = false;
+                        frmAW.Show();
+                        //hidWebBroser = new HidWebBrowser { showTipsDelegate = showTips };
+                        //hidWebBroser.HidWebBrowserRun();
                         
                         //Tips9AWTimer.Enabled = false;
                     }

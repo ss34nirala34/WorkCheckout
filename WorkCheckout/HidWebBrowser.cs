@@ -137,7 +137,7 @@ namespace WorkCheckout
                    {
                        
                        LogUtil.WriteError(ex);
-                       _showWindows();
+                    
 
                    }
 
