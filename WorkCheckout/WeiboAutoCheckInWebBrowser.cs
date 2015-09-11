@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using EncryptionHelper;
 using NetDimension.Weibo;
 using SHDocVw;
@@ -65,7 +66,7 @@ namespace WorkCheckout
         private void webBrowserAg_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://rd.tencent.com/tapd/ptlogin/ptlogins/login?";
+            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowserWb.Url != null && webBrowserWb.Url.ToString().Contains(urlAdd)) || (webBrowserWb.Url != null && webBrowserWb.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页
@@ -99,30 +100,43 @@ namespace WorkCheckout
                 {
                     Thread.Sleep(1000);
                     bool search = true;
-                    while (search)
+                    try
                     {
-                        webBrowserWb.Invoke(new Action(() =>
+                        while (search)
                         {
-                            HtmlDocument cd = webBrowserWb.Document;
-                            HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
-
-                            foreach (HtmlElement item in dhl)
+                            webBrowserWb.Invoke(new Action(() =>
                             {
-                                if (item.InnerText == "提交" || item.InnerText == "Submit")
-                                {
-                                    item.InvokeMember("click");
-                                    search = false;
-                                    Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                    FrmSet.CheckInTime = DateTime.Now;
-                                    Sina = new Client(WeiboOauth);
-                                    Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}",Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
-                                    webBrowserWb.Dispose();
-                                }
-                            }
-                        }));
+                                HtmlDocument cd = webBrowserWb.Document;
+                                HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
 
-                        Thread.Sleep(1000);
+                                foreach (HtmlElement item in dhl)
+                                {
+                                    if (item.InnerText == "提交" || item.InnerText == "Submit")
+                                    {
+                                        item.InvokeMember("click");
+                                        search = false;
+                                        Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
+                                        FrmSet.CheckInTime = DateTime.Now;
+                                        if (WeiboOauth != null)
+                                        {
+                                            Sina = new Client(WeiboOauth);
+                                            Sina.API.Entity.Statuses.Update(string.Format("{0} {1} {2}", Type, "成功签入", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now)));
+                                        }
+
+                                        webBrowserWb.Dispose();
+                                    }
+                                }
+                            }));
+
+                            Thread.Sleep(1000);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        
+                        LogUtil.WriteError(ex);
+                    }
+                    
                 });
                 submitT.Start();
             } 

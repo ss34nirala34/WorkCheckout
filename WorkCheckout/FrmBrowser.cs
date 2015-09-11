@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using mshtml;
 using SHDocVw;
 
@@ -140,7 +141,7 @@ namespace WorkCheckout
         {
 
             string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://rd.tencent.com/tapd/ptlogin/ptlogins/login?";
+            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd)) || (webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页
@@ -174,9 +175,11 @@ namespace WorkCheckout
                     {
                         Thread.Sleep(1000);
                         bool search = true;
-                        while (search)
+                        try
                         {
-                            this.Invoke(new Action(() =>
+                            while (search)
+                            {
+                                this.Invoke(new Action(() =>
                                 {
                                     HtmlDocument cd = webBrowser1.Document;
                                     HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
@@ -188,14 +191,21 @@ namespace WorkCheckout
                                             item.InvokeMember("click");
                                             search = false;
                                             Share.wFiles.WriteString("WCO", "LastSignInTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                    FrmSet.lastCheckInTime=FrmSet.CheckInTime = DateTime.Now;
+                                            FrmSet.lastCheckInTime = FrmSet.CheckInTime = DateTime.Now;
 
                                         }
                                     }
                                 }));
 
-                            Thread.Sleep(1000);
+                                Thread.Sleep(1000);
+                            }
                         }
+                        catch (Exception ex)
+                        {
+                            
+                            LogUtil.WriteError(ex);
+                        }
+                        
                     });
                 submitT.Start();
             }

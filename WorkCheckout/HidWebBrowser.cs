@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Common;
 using SHDocVw;
 using WebBrowser = System.Windows.Forms.WebBrowser;
 
@@ -22,7 +23,7 @@ namespace WorkCheckout
        WebBrowser webBrowser=new WebBrowser();
        bool search = true;
        public FrmSet.ShowTipsDelegate showTipsDelegate;
-      
+       public FrmSet.ShowWindowsDele _showWindows;
        public void HidWebBrowserRun()
        {
            webBrowser.DocumentCompleted += webBrowser_DocumentCompleted;
@@ -31,7 +32,7 @@ namespace WorkCheckout
            {
                search = true;
                Share.SuppressWininetBehavior();
-               webBrowser.Navigate("http://rd.tencent.com/outsourcing/attendances/check_out/");
+               webBrowser.Navigate("http://om.tencent.com/attendances/check_out/");
                wb = webBrowser.ActiveXInstance as SHDocVw.WebBrowser;
                wb.NavigateComplete2 += new DWebBrowserEvents2_NavigateComplete2EventHandler(wb_NavigateComplete2);
                //waitwebCompleted();
@@ -65,7 +66,7 @@ namespace WorkCheckout
        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
        {
            string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-           string urlAdd2 = "http://rd.tencent.com/tapd/ptlogin/ptlogins/login?";
+           string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
            if ((webBrowser.Url != null && webBrowser.Url.ToString().Contains(urlAdd)) || (webBrowser.Url != null && webBrowser.Url.ToString().Contains(urlAdd2)))
            {
                //判断是否已加载完网页
@@ -102,32 +103,45 @@ namespace WorkCheckout
                System.Threading.Thread submitT = new Thread(() =>
                {
                    Thread.Sleep(1000);
-
-                   while (search)
+                
+                   try
                    {
-                       webBrowser.Invoke(new Action(() =>
+                       while (search)
                        {
-                           HtmlDocument cd = webBrowser.Document;
-                           HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
-
-                           foreach (HtmlElement item in dhl)
+                           webBrowser.Invoke(new Action(() =>
                            {
-                               if (item.InnerText == "提交" || item.InnerText == "Submit")
+
+                               HtmlDocument cd = webBrowser.Document;
+                               HtmlElementCollection dhl = cd.GetElementsByTagName("BUTTON");
+
+                               foreach (HtmlElement item in dhl)
                                {
-                                   item.InvokeMember("click");
-                                   search = false;
-                                   Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
-                                  
+                                   if (item.InnerText == "提交" || item.InnerText == "Submit")
+                                   {
+                                       item.InvokeMember("click");
+                                       search = false;
+                                       Share.wFiles.WriteString("WCO", "LastCheckOutTime", string.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now));
+
                                        showTipsDelegate();
-                                     
+
                                        webBrowser.Dispose();
 
+                                   }
                                }
-                           }
-                       }));
+                           }));
 
-                       Thread.Sleep(1000);
+                           Thread.Sleep(1000);
+                       }
                    }
+                   catch (Exception ex)
+                   {
+                       
+                       LogUtil.WriteError(ex);
+                    
+
+                   }
+
+                  
                });
                submitT.Start();
            } 

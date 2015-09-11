@@ -185,32 +185,40 @@ namespace WorkCheckout
                     //判断是否已加载完网页
                     if (webBrowser.ReadyState == WebBrowserReadyState.Complete)
                     {
-                        //获取网页文档对象，相当于获取网页的全部源码
-                        HtmlDocument htmlDoc = webBrowser.Document;
-                        //设置帐号
-                        HtmlElement id = htmlDoc.GetElementById("userId");
-                        id.SetAttribute("value", passport);
-                        //设置密码
-                        HtmlElement pwd = htmlDoc.GetElementById("passwd");
-                        pwd.SetAttribute("value", password);
-                        //登录
-
-                        HtmlDocument cd = webBrowser.Document;
-                        HtmlElementCollection dhl = cd.GetElementsByTagName("a");
-
-                        foreach (HtmlElement item in dhl)
+                        try
                         {
+                            //获取网页文档对象，相当于获取网页的全部源码
+                            HtmlDocument htmlDoc = webBrowser.Document;
+                            //设置帐号
+                            HtmlElement id = htmlDoc.GetElementById("userId");
+                            id.SetAttribute("value", passport);
+                            //设置密码
+                            HtmlElement pwd = htmlDoc.GetElementById("passwd");
+                            pwd.SetAttribute("value", password);
+                            //登录
 
-                            if (item.GetAttribute("action-type").Equals("submit"))
+                            HtmlDocument cd = webBrowser.Document;
+                            HtmlElementCollection dhl = cd.GetElementsByTagName("a");
+
+                            foreach (HtmlElement item in dhl)
                             {
-                                item.InvokeMember("click");
-                                break;
+
+                                if (item.GetAttribute("action-type").Equals("submit"))
+                                {
+                                    item.InvokeMember("click");
+                                    break;
+                                }
+                            }
+                            HtmlElement btn = htmlDoc.GetElementById("submit");
+                            if (btn != null)
+                            {
+                                btn.InvokeMember("click");
                             }
                         }
-                        HtmlElement btn = htmlDoc.GetElementById("submit");
-                        if (btn != null)
+                        catch (Exception ex)
                         {
-                            btn.InvokeMember("click");
+
+                            LogUtil.WriteError(ex);
                         }
                     }
                 }
