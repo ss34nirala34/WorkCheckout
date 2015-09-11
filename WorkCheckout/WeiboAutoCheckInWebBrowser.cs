@@ -32,7 +32,7 @@ namespace WorkCheckout
             try
             {
                 Share.SuppressWininetBehavior();
-                webBrowserWb.Navigate("http://rd.tencent.com/outsourcing/attendances/add");
+                webBrowserWb.Navigate("https://rd.tencent.com/outsourcing/attendances/add");
                 wb = webBrowserWb.ActiveXInstance as SHDocVw.WebBrowser;
                 wb.NavigateComplete2 += new DWebBrowserEvents2_NavigateComplete2EventHandler(wb_NavigateComplete2);
             }
@@ -65,8 +65,8 @@ namespace WorkCheckout
 
         private void webBrowserAg_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
+            string urlAdd = "https://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
+            string urlAdd2 = "https://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowserWb.Url != null && webBrowserWb.Url.ToString().Contains(urlAdd)) || (webBrowserWb.Url != null && webBrowserWb.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页

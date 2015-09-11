@@ -24,7 +24,7 @@ namespace WorkCheckout
             try
             {
                 Share.SuppressWininetBehavior();
-                webBrowserAg.Navigate("http://rd.tencent.com/outsourcing/attendances/add");
+                webBrowserAg.Navigate("https://rd.tencent.com/outsourcing/attendances/add");
             }
             catch (Exception)
             {
@@ -38,8 +38,8 @@ namespace WorkCheckout
 
         private void webBrowserAg_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
+            string urlAdd = "https://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
+            string urlAdd2 = "https://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowserAg.Url != null && webBrowserAg.Url.ToString().Contains(urlAdd)) || (webBrowserAg.Url != null && webBrowserAg.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页
@@ -62,7 +62,7 @@ namespace WorkCheckout
                 }
             }
             string urlCheckOut = "http://om.tencent.com/attendances/check_out";
-            string urlCheckIn = "http://rd.tencent.com/outsourcing/attendances/add";
+            string urlCheckIn = "https://rd.tencent.com/outsourcing/attendances/add";
             if (webBrowserAg.Url != null)
             {
                 if (webBrowserAg.Url.ToString().Contains(urlCheckOut) || webBrowserAg.Url.ToString().Contains(urlCheckIn))

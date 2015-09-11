@@ -70,7 +70,7 @@ namespace WorkCheckout
             }
             else
             {
-                string target = "http://rd.tencent.com/outsourcing/attendances/add";
+                string target = "https://rd.tencent.com/outsourcing/attendances/add";
                 try
                 {
                     System.Diagnostics.Process.Start(target);

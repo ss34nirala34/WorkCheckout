@@ -98,7 +98,7 @@ namespace WorkCheckout
         Timer timer = new Timer();
         void timer_Tick(object sender, EventArgs e)
         {
-            //string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
+            //string urlAdd = "https://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
             //if (webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd))
             //{
             //    //判断是否已加载完网页
@@ -125,8 +125,8 @@ namespace WorkCheckout
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
 
-            string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?";
-            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
+            string urlAdd = "https://rd.tencent.com/top/ptlogin/ptlogins/login?";
+            string urlAdd2 = "https://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd)) || (webBrowser1.Url != null && webBrowser1.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页

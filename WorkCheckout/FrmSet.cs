@@ -140,7 +140,7 @@ namespace WorkCheckout
             try
             {
                 Share.SuppressWininetBehavior();
-                webBrowser.Navigate("http://rd.tencent.com/outsourcing/attendances/add");
+                webBrowser.Navigate("https://rd.tencent.com/outsourcing/attendances/add");
 
                 //waitwebCompleted();
                 //SHDocVw.WebBrowser wb = this.webBrowser1.ActiveXInstance as SHDocVw.WebBrowser;
@@ -154,8 +154,8 @@ namespace WorkCheckout
         }
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            string urlAdd = "http://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
-            string urlAdd2 = "http://tapd.tencent.com/ptlogin/ptlogins/login?";
+            string urlAdd = "https://rd.tencent.com/top/ptlogin/ptlogins/login?site=";
+            string urlAdd2 = "https://tapd.tencent.com/ptlogin/ptlogins/login?";
             if ((webBrowser.Url != null && webBrowser.Url.ToString().Contains(urlAdd)) || (webBrowser.Url != null && webBrowser.Url.ToString().Contains(urlAdd2)))
             {
                 //判断是否已加载完网页
@@ -179,7 +179,7 @@ namespace WorkCheckout
             }
             if (webBrowser.ReadyState != WebBrowserReadyState.Complete) return;
             string urlCheckOut = "http://om.tencent.com/attendances/check_out";
-            string urlCheckIn = "http://rd.tencent.com/outsourcing/attendances/add";
+            string urlCheckIn = "https://rd.tencent.com/outsourcing/attendances/add";
             if (webBrowser.Url != null)
             {
                 if (webBrowser.Url.ToString().Contains(urlCheckOut) || webBrowser.Url.ToString().Contains(urlCheckIn))
@@ -1010,7 +1010,7 @@ namespace WorkCheckout
         void ManualCheckIn_Click(object sender, EventArgs e)
         {
             FrmBrowser frm = new FrmBrowser();
-            frm.TopMost = true;
+            //frm.TopMost = true;
             frm.ShowInTaskbar = true;
             frm.Show();
         }
